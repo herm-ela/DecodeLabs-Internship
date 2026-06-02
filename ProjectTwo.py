@@ -40,9 +40,6 @@ print("Rows:", df.shape[0], " Columns:", df.shape[1])
 print("\nFirst 5 rows:")
 print(df.head())
 
-# ------------------------------------------------------------
-# 2. Data cleaning
-# ------------------------------------------------------------
 print("\nMissing values:")
 print(df.isnull().sum())
 df = df.dropna(subset=['TotalPrice'])
@@ -50,9 +47,7 @@ df = df.dropna(subset=['TotalPrice'])
 if 'Date' in df.columns:
     df['Date'] = pd.to_datetime(df['Date'])
 
-# ------------------------------------------------------------
-# 3. Basic statistics
-# ------------------------------------------------------------
+
 num_cols = ['Quantity', 'UnitPrice', 'TotalPrice']
 num_cols = [c for c in num_cols if c in df.columns]
 
@@ -65,9 +60,6 @@ print("BASIC STATISTICS")
 print("="*60)
 print(stats.round(2))
 
-# ------------------------------------------------------------
-# 4. Outlier detection (IQR)
-# ------------------------------------------------------------
 def iqr_outliers(data, col):
     q1 = data[col].quantile(0.25)
     q3 = data[col].quantile(0.75)
@@ -90,9 +82,6 @@ if len(outliers) > 0:
     cols = [c for c in cols if c in outliers.columns]
     print(outliers[cols].head())
 
-# ------------------------------------------------------------
-# 5. Product trends
-# ------------------------------------------------------------
 if 'Product' in df.columns:
     prod_avg = df.groupby('Product')['TotalPrice'].mean().sort_values(ascending=False)
     print("\n" + "="*60)
@@ -109,9 +98,6 @@ if 'Product' in df.columns:
     plt.savefig('product_trend.png')
     plt.show()
 
-# ------------------------------------------------------------
-# 6. Correlation
-# ------------------------------------------------------------
 corr_val = 0
 if 'Quantity' in df.columns and 'TotalPrice' in df.columns:
     corr_val = df['Quantity'].corr(df['TotalPrice'])
@@ -127,9 +113,6 @@ if 'Quantity' in df.columns and 'TotalPrice' in df.columns:
     plt.savefig('scatter.png')
     plt.show()
 
-# ------------------------------------------------------------
-# 7. Distribution plots
-# ------------------------------------------------------------
 plt.figure(figsize=(12,5))
 plt.hist(df['TotalPrice'], bins=50, edgecolor='black', alpha=0.7, color='green')
 plt.axvline(df['TotalPrice'].mean(), color='red', linestyle='--', label='Mean: {:.2f}'.format(df['TotalPrice'].mean()))
@@ -148,9 +131,6 @@ plt.tight_layout()
 plt.savefig('boxplot.png')
 plt.show()
 
-# ------------------------------------------------------------
-# 8. Order status
-# ------------------------------------------------------------
 if 'OrderStatus' in df.columns:
     status_counts = df['OrderStatus'].value_counts()
     print("\n" + "="*60)
@@ -166,9 +146,6 @@ if 'OrderStatus' in df.columns:
     plt.savefig('order_status.png')
     plt.show()
 
-# ------------------------------------------------------------
-# 9. Summary report (no triple quotes, no f-strings)
-# ------------------------------------------------------------
 mean_val = df['TotalPrice'].mean()
 median_val = df['TotalPrice'].median()
 out_count = len(outliers)
@@ -213,39 +190,5 @@ print("   - boxplot.png")
 if 'OrderStatus' in df.columns:
     print("   - order_status.png")
 print("="*70)
-
-# Save report to file
-with open("EDA_Report.txt", "w") as f:
-    f.write("EDA SUMMARY REPORT\n")
-    f.write("="*70 + "\n")
-    f.write("1. PROBLEM STATEMENT\n")
-    f.write("   Understand order value patterns, detect outliers, find top products.\n\n")
-    f.write("2. METHODOLOGY\n")
-    f.write("   - Loaded {} orders.\n".format(df.shape[0]))
-    f.write("   - Mean, median, min, max calculated.\n")
-    f.write("   - Outliers detected using IQR (1.5*IQR rule).\n")
-    f.write("   - Product-wise average order value computed.\n")
-    f.write("   - Pearson correlation between Quantity and TotalPrice.\n\n")
-    f.write("3. KEY FINDINGS\n")
-    f.write("   - Average TotalPrice: Rs. {:.2f}\n".format(mean_val))
-    f.write("   - Median TotalPrice: Rs. {:.2f}\n".format(median_val))
-    f.write("   - Mean > Median -> right-skewed (few large orders).\n")
-    f.write("   - Number of outlier orders: {}\n".format(out_count))
-    f.write("   - Top product by avg order value: {} (Rs. {:.2f})\n".format(top_prod, top_val))
-    f.write("   - Correlation (Quantity vs TotalPrice): {:.3f}\n".format(corr_val))
-    f.write("\n4. RECOMMENDATIONS\n")
-    f.write("   - Investigate outlier orders for errors or bulk buyers.\n")
-    f.write("   - Focus marketing on {}.\n".format(top_prod))
-    f.write("   - Monitor order status for high cancellation/return rates.\n")
-    f.write("\n5. VISUALS GENERATED\n")
-    f.write("   - product_trend.png\n")
-    f.write("   - scatter.png\n")
-    f.write("   - histogram.png\n")
-    f.write("   - boxplot.png\n")
-    if 'OrderStatus' in df.columns:
-        f.write("   - order_status.png\n")
-    f.write("="*70 + "\n")
-
-print("\nReport saved as 'EDA_Report.txt'")
 print("Plots saved as PNG files.")
 print("="*60)
