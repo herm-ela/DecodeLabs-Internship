@@ -7,35 +7,10 @@ import os
 sns.set_style("whitegrid")
 plt.rcParams['figure.figsize'] = (12, 6)
 
-possible_paths = [
-    "Dataset for Data Analytics project 2.csv",
-    "file/Dataset for Data Analytics project 2.csv",
-    "Dataset for Data Analytics (1).xlsx",
-    "file/Dataset for Data Analytics (1).xlsx"
-]
-
-df = None
-used_path = None
-
-for path in possible_paths:
-    if os.path.exists(path):
-        if path.endswith('.csv'):
-            df = pd.read_csv(path)
-        else:
-            df = pd.read_excel(path, sheet_name=0)
-        used_path = path
-        break
-
-if df is None:
-    print("ERROR: Data file not found. Current directory contents:")
-    for f in os.listdir('.'):
-        print("  -", f)
-    exit(1)
+df = pd.read_csv('file/Dataset for Data Analytics project 2.csv')
 
 print("="*60)
-print("EXPLORATORY DATA ANALYSIS - PROJECT 2")
 print("="*60)
-print("Loaded from:", used_path)
 print("Rows:", df.shape[0], " Columns:", df.shape[1])
 print("\nFirst 5 rows:")
 print(df.head())
@@ -155,39 +130,3 @@ else:
     top_prod = "N/A"
     top_val = 0
 
-print("\n" + "="*70)
-print("EDA SUMMARY REPORT")
-print("="*70)
-print("1. PROBLEM STATEMENT")
-print("   Understand order value patterns, detect outliers, find top products.")
-print()
-print("2. METHODOLOGY")
-print("   - Loaded {} orders.".format(df.shape[0]))
-print("   - Mean, median, min, max calculated.")
-print("   - Outliers detected using IQR (1.5*IQR rule).")
-print("   - Product-wise average order value computed.")
-print("   - Pearson correlation between Quantity and TotalPrice.")
-print()
-print("3. KEY FINDINGS")
-print("   - Average TotalPrice: Rs. {:.2f}".format(mean_val))
-print("   - Median TotalPrice: Rs. {:.2f}".format(median_val))
-print("   - Mean > Median -> right-skewed (few large orders).")
-print("   - Number of outlier orders: {}".format(out_count))
-print("   - Top product by avg order value: {} (Rs. {:.2f})".format(top_prod, top_val))
-print("   - Correlation (Quantity vs TotalPrice): {:.3f}".format(corr_val))
-print()
-print("4. RECOMMENDATIONS")
-print("   - Investigate outlier orders for errors or bulk buyers.")
-print("   - Focus marketing on {}.".format(top_prod))
-print("   - Monitor order status for high cancellation/return rates.")
-print()
-print("5. VISUALS GENERATED")
-print("   - product_trend.png")
-print("   - scatter.png")
-print("   - histogram.png")
-print("   - boxplot.png")
-if 'OrderStatus' in df.columns:
-    print("   - order_status.png")
-print("="*70)
-print("Plots saved as PNG files.")
-print("="*60)
