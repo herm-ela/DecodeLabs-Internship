@@ -1,0 +1,5 @@
+Change ID,Description,Impact,Status
+CR001,Fill missing CouponCode,Replaced empty/NaN with 'None',Resolved
+CR006,Standardize date format,Converted to YYYY-MM-DD,Resolved
+CR007,Clean text columns,Trimmed spaces & applied title case,Resolved
+CR008,Round prices to 2 decimals,UnitPrice & TotalPrice,Resolved
